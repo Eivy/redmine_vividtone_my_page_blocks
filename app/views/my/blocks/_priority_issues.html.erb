@@ -1,7 +1,9 @@
 <h3><%= l(:priority_issues) %></h3>
 
 <%
-  open_issues = Issue.visible.open
+  current_user = User.current
+  projects = current_user.projects.map{|i| i.id}
+  open_issues = Issue.visible.open.where(["#{Project.table_name}.id in (?)", projects])
   today = Date.today
   current_user_ids = [User.current.id] + User.current.group_ids
 

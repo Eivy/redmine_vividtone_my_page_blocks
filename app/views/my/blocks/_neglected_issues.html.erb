@@ -1,8 +1,8 @@
 <%
   current_user_ids = [User.current.id] + User.current.group_ids
-
+  projects = User.current.projects.map{|i| i.id}
   neglected_issues = Issue.visible.open
-    .where(["(assigned_to_id in (?) or assigned_to_id is null) and due_date is null and #{Issue.table_name}.updated_on < ?", current_user_ids, Date.today - 7])
+  .where(["(assigned_to_id in (?) or assigned_to_id is null) and due_date is null and #{Issue.table_name}.updated_on < ? and #{Project.table_name}.id in (?)", current_user_ids, Date.today - 7, projects])
     .order(updated_on: :desc)
 %>
 
